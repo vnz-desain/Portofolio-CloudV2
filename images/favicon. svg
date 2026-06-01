@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+
+  <!-- Background -->
+  <rect width="64" height="64" fill="#050505"/>
+
+  <!-- Glow -->
+  <defs>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Monogram M -->
+  <path
+    d="M12 52V12H20L32 30L44 12H52V52H45V25L34 42H30L19 25V52Z"
+    fill="#C41E3A"
+    filter="url(#glow)"
+  />
+
+  <!-- Signature Accent -->
+  <rect
+    x="12"
+    y="56"
+    width="40"
+    height="2"
+    fill="#C41E3A"
+    opacity="0.9"
+  />
+
+</svg>
