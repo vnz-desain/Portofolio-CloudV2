@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <!-- 1. DOMAIN UTAMA (Pusat Kendali) -->
+  <url>
+    <loc>https://evanalmunawar.my.id/</loc>
+    <lastmod>2026-06-23</lastmod>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- 2. SUBDOMAIN PLAYLIST -->
+  <url>
+    <loc>https://playlist.evanalmunawar.my.id/</loc>
+    <lastmod>2026-06-23</lastmod>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 3. SUBDOMAIN GALLERY -->
+  <url>
+    <loc>https://gallery.evanalmunawar.my.id/</loc>
+    <lastmod>2026-06-23</lastmod>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 4. SUBDOMAIN PROJECT -->
+  <url>
+    <loc>https://project.evanalmunawar.my.id/</loc>
+    <lastmod>2026-06-23</lastmod>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 5. MARKAS BESAR VENTURE (MEA HUB) -->
+  <url>
+    <loc>https://hub.meaecosystem.my.id/</loc>
+    <lastmod>2026-06-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+
+</urlset>
