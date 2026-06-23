@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://evanalmunawar.my.id/sitemap.xml
