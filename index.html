@@ -6,7 +6,87 @@
     PERF: Added theme-color so Android Chrome renders the status bar correctly
     and avoids a flash of white during load.
   -->
-  <meta name="theme-color" content="#050505" />
+  <meta name="theme-color" content="#080D18" />
+
+  <!-- Schema.org structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://evanalmunawar.my.id/#person",
+        "name": "M. Evan Almunawar",
+        "alternateName": "MEA",
+        "url": "https://evanalmunawar.my.id",
+        "image": "https://evanalmunawar.my.id/images/profile.webp",
+        "jobTitle": "Multimedia Creator & Founder",
+        "description": "Multimedia creator experienced in video editing, cinematography, content management, and digital media storytelling. Founder of the MEA Ecosystem platform.",
+        "alumniOf": {
+          "@type": "EducationalOrganization",
+          "name": "MAN 2 Kota Cirebon",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Cirebon",
+            "addressRegion": "West Java",
+            "addressCountry": "ID"
+          }
+        },
+        "knowsAbout": [
+          "Video Editing",
+          "Cinematography",
+          "CapCut",
+          "Canva",
+          "CorelDRAW",
+          "Digital Media",
+          "Creative Direction",
+          "Social Media Management",
+          "Web Development"
+        ],
+        "sameAs": [
+          "https://instagram.com/ef.vnz",
+          "https://tiktok.com/@vanta.es",
+          "https://threads.com/@ef.vnz"
+        ],
+        "email": "mailto:evanalmunawar.work@email.com",
+        "founder": {
+          "@id": "https://evanalmunawar.my.id/#mea-ecosystem"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://evanalmunawar.my.id/#mea-ecosystem",
+        "name": "MEA Ecosystem",
+        "description": "A digital platform ecosystem built and founded by M. Evan Almunawar, integrating tools, assistant, playlist, and gallery services under one identity.",
+        "url": "https://evanalmunawar.my.id",
+        "founder": {
+          "@id": "https://evanalmunawar.my.id/#person"
+        },
+        "foundingDate": "2025",
+        "knowsAbout": "Digital Platform, Web Tools, Creative Services",
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "MEA Ecosystem Services",
+          "itemListElement": [
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Tools", "url": "https://tools.evanalmunawar.my.id" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Assistant", "url": "https://assistant.evanalmunawar.my.id" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Playlist", "url": "https://playlist.evanalmunawar.my.id" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Gallery", "url": "https://gallery.evanalmunawar.my.id" } }
+          ]
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://evanalmunawar.my.id/#website",
+        "url": "https://evanalmunawar.my.id",
+        "name": "M. Evan Almunawar — Portfolio",
+        "description": "Portfolio of M. Evan Almunawar — Multimedia Creator and Founder of MEA Ecosystem.",
+        "author": { "@id": "https://evanalmunawar.my.id/#person" },
+        "inLanguage": "en"
+      }
+    ]
+  }
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>M. Evan Almunawar — Portfolio</title>
 
@@ -184,10 +264,7 @@
           <p class="section-label">— About Me</p>
           <h2 class="section-title">Seeing The World<br /><em>Through The Lens</em></h2>
           <p class="about-body">
-            I have a strong interest in digital media, technology, and creative visual storytelling. Experienced in using computers for media editing, content management, event documentation, and social media management with a clean and detail-oriented approach.
-          </p>
-          <p class="about-body">
-            During my studies at MAN 2 Kota Cirebon majoring in Multimedia, I actively participated in organizations as Chairman of Journalism & Broadcasting and Head of Multimedia Division of the Student Council for the 2025/2026 period. These experiences helped me develop teamwork, leadership, and problem-solving skills in creative and organizational environments.
+            I have a strong interest in digital media, technology, and creative visual storytelling. Experienced in media editing, content management, event documentation, and social media management with a clean and detail-oriented approach.
           </p>
           <div class="about-tags">
             <span>Administration</span>
@@ -195,6 +272,14 @@
             <span>Media Editing</span>
             <span>Technology & Computer</span>
           </div>
+
+          <!-- ── TABS ── -->
+          <div class="about-tabs" id="aboutTabs" role="tablist" aria-label="Background tabs">
+            <!-- Tab buttons injected by JS -->
+          </div>
+
+          <!-- ── TAB PANELS ── each panel contains a slider, built by JS -->
+          <div id="aboutPanels"></div>
         </div>
 
       </div>

@@ -1,0 +1,56 @@
+[
+  {
+    "tab": "Education",
+    "period": "2023 — 2026",
+    "title": "MAN 2 Kota Cirebon",
+    "subtitle": "Multimedia Major",
+    "desc": "Studying at MAN 2 Kota Cirebon with a focus on Multimedia. The curriculum covers video production, graphic design, digital photography, and media management — building a strong technical and creative foundation.",
+    "tags": ["Multimedia", "Video Production", "Graphic Design", "Digital Photography"],
+    "founder": false
+  },
+  {
+    "tab": "Education",
+    "period": "2025 — 2026",
+    "title": "OSIS — Ketua Jurnalistik & Broadcasting",
+    "subtitle": "Student Council · MAN 2 Kota Cirebon",
+    "desc": "Serving as Chairman of Journalism & Broadcasting within the Student Council for the 2025/2026 period. Responsible for coordinating media coverage of school events, managing the documentation team, and producing broadcast content.",
+    "tags": ["Leadership", "Journalism", "Broadcasting", "Event Coverage"],
+    "founder": false
+  },
+  {
+    "tab": "Education",
+    "period": "2025 — 2026",
+    "title": "Kepala Divisi Multimedia — OSIS",
+    "subtitle": "Head of Multimedia Division · Student Council",
+    "desc": "Leading the Multimedia Division of the Student Council. Overseeing all visual and digital output: photography, video editing, motion graphics, and social media content for the school organisation.",
+    "tags": ["Multimedia Direction", "Team Management", "Content Strategy", "Visual Design"],
+    "founder": false
+  },
+  {
+    "tab": "Venture",
+    "period": "2025 — Present",
+    "title": "MEA Ecosystem",
+    "subtitle": "Platform · Founder & Builder",
+    "desc": "MEA Ecosystem is a personal digital platform I am building and actively developing — an integrated ecosystem of web-based services under a single identity. The platform currently includes Tools, an AI-powered Assistant, a Playlist service, and a Gallery, all hosted under the evanalmunawar.my.id domain family.",
+    "tags": ["Platform Development", "Web Services", "System Design", "Full-Stack"],
+    "founder": true
+  },
+  {
+    "tab": "Venture",
+    "period": "2025 — Present",
+    "title": "MEA Tools",
+    "subtitle": "tools.evanalmunawar.my.id",
+    "desc": "A collection of useful web-based tools built and maintained as part of the MEA Ecosystem. Designed to be lightweight, fast, and accessible — solving real day-to-day needs without requiring any app installation.",
+    "tags": ["Web Tools", "UX Design", "Utility Apps"],
+    "founder": true
+  },
+  {
+    "tab": "Venture",
+    "period": "2025 — Present",
+    "title": "MEA Assistant",
+    "subtitle": "assistant.evanalmunawar.my.id",
+    "desc": "An AI-powered assistant interface integrated into the MEA Ecosystem, providing conversational and creative support. Built as a subdomain service connecting users to intelligent assistance within the platform.",
+    "tags": ["AI Integration", "Conversational UI", "Product Design"],
+    "founder": true
+  }
+]

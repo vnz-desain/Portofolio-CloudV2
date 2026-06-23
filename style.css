@@ -40,15 +40,19 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --black:       #050505;
-  --black-soft:  #0D0D0D;
-  --black-card:  #111111;
-  --red:         #8B0000;
-  --red-mid:     #A31515;
-  --red-bright:  #C41E3A;
-  --white:       #F0EDE8;
-  --white-dim:   #9A9690;
-  --grey-border: rgba(255,255,255,0.07);
+  --black:       #080D18;
+  --black-soft:  #0B111E;
+  --black-card:  #101828;
+  --red:         #1E4D6B;
+  --red-mid:     #2a6a8a;
+  --red-bright:  #81D4FA;
+  --white:       #F0F4F8;
+  --white-dim:   #8A9AAD;
+  --grey-border: rgba(129,212,250,0.09);
+  --accent:      #81D4FA;
+  --accent-dim:  rgba(129,212,250,0.10);
+  --surface:     #131C2E;
+  --surface-2:   #1A2540;
 
   --font-display: 'Bebas Neue', sans-serif;
   --font-body:    'Cormorant Garamond', serif;
@@ -77,10 +81,47 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
+/* ===== BROWSER DEFAULT OVERRIDES =====
+   Remove ALL browser-default styling: selection, focus rings,
+   tap highlights, input styling, etc.
+*/
+
+/* Custom text selection */
+::selection {
+  background: rgba(129, 212, 250, 0.25);
+  color: var(--white);
+}
+::-moz-selection {
+  background: rgba(129, 212, 250, 0.25);
+  color: var(--white);
+}
+
+/* Remove blue tap highlight on mobile (Android/iOS WebView) */
+* { -webkit-tap-highlight-color: transparent; }
+
+/* Custom focus ring — replaces browser blue outline */
+:focus-visible {
+  outline: 1px solid var(--red-bright);
+  outline-offset: 3px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* Remove default button/input browser styles */
+button, input, textarea, select {
+  -webkit-appearance: none;
+  appearance: none;
+  background: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  font-family: inherit;
+  color: inherit;
+}
+
 /* Minimal scrollbar — cosmetic only, no perf impact */
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: var(--black); }
-::-webkit-scrollbar-thumb { background: var(--red); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: var(--red-bright); border-radius: 2px; opacity: 0.5; }
 
 img { display: block; width: 100%; height: 100%; object-fit: cover; }
 a { color: inherit; text-decoration: none; }
@@ -223,9 +264,9 @@ a { color: inherit; text-decoration: none; }
   left: 50%;
   transform: translateX(-50%) translateY(-6px);
   min-width: 160px;
-  background: rgba(8, 0, 0, 0.97);
+  background: rgba(8, 13, 24, 0.97);
   border: 1px solid var(--grey-border);
-  border-top: 1px solid rgba(196,30,58,0.35);
+  border-top: 1px solid rgba(129,212,250,0.30);
   padding: 0.5rem 0;
   opacity: 0;
   pointer-events: none;
@@ -240,9 +281,9 @@ a { color: inherit; text-decoration: none; }
   top: -5px; left: 50%;
   transform: translateX(-50%) rotate(45deg);
   width: 8px; height: 8px;
-  background: rgba(8, 0, 0, 0.97);
-  border-left: 1px solid rgba(196,30,58,0.35);
-  border-top: 1px solid rgba(196,30,58,0.35);
+  background: rgba(8, 13, 24, 0.97);
+  border-left: 1px solid rgba(129,212,250,0.25);
+  border-top: 1px solid rgba(129,212,250,0.25);
 }
 
 /* open state */
@@ -266,7 +307,7 @@ a { color: inherit; text-decoration: none; }
 }
 .nav-dropdown a:hover {
   color: var(--white);
-  background-color: rgba(139,0,0,0.12);
+  background-color: rgba(129,212,250,0.07);
   padding-left: 1.65rem;
 }
 
@@ -312,8 +353,8 @@ a { color: inherit; text-decoration: none; }
   z-index: 0;
   /* Fallback gradient when no image exists */
   background:
-    radial-gradient(ellipse 70% 55% at 60% 35%, rgba(139,0,0,0.16) 0%, transparent 65%),
-    linear-gradient(160deg, #0A0000 0%, #050505 45%, #0D0000 100%);
+    radial-gradient(ellipse 70% 55% at 60% 35%, rgba(129,212,250,0.08) 0%, transparent 65%),
+    linear-gradient(160deg, #060C18 0%, #080D18 45%, #0A1020 100%);
 }
 
 /* PERF: Hero image uses object-fit:cover — no JS resize needed */
@@ -333,9 +374,9 @@ a { color: inherit; text-decoration: none; }
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg,
-    rgba(5,5,5,0.25) 0%,
-    rgba(5,5,5,0.05) 40%,
-    rgba(5,5,5,0.65) 100%
+    rgba(8,13,24,0.25) 0%,
+    rgba(8,13,24,0.05) 40%,
+    rgba(8,13,24,0.70) 100%
   );
 }
 
@@ -368,7 +409,7 @@ a { color: inherit; text-decoration: none; }
   color: transparent;
   -webkit-text-stroke: 1px var(--white);
   /* PERF: single small text-shadow instead of multiple layered glows */
-  text-shadow: 0 0 60px rgba(196,30,58,0.2);
+  text-shadow: 0 0 60px rgba(129,212,250,0.15);
 }
 
 .hero-sub {
@@ -515,7 +556,7 @@ a { color: inherit; text-decoration: none; }
   right: -15%; top: 5%;
   width: 500px; height: 500px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(139,0,0,0.06) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(129,212,250,0.04) 0%, transparent 65%);
   pointer-events: none;
 }
 
@@ -615,7 +656,7 @@ a { color: inherit; text-decoration: none; }
   touch-action: manipulation;
 }
 .project-card:hover {
-  border-color: rgba(196,30,58,0.45);
+  border-color: rgba(129,212,250,0.35);
   transform: translateY(-5px);
 }
 
@@ -626,7 +667,7 @@ a { color: inherit; text-decoration: none; }
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 40%, rgba(196,30,58,0.08) 0%, transparent 65%);
+  background: radial-gradient(circle at 50% 40%, rgba(129,212,250,0.06) 0%, transparent 65%);
   opacity: 0;
   /* PERF: opacity transition is compositor-safe */
   transition: opacity var(--t-fast);
@@ -694,8 +735,8 @@ a { color: inherit; text-decoration: none; }
 .card-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .card-tags span {
   padding: 0.22rem 0.65rem;
-  background: rgba(139,0,0,0.12);
-  border: 1px solid rgba(139,0,0,0.28);
+  background: rgba(129,212,250,0.08);
+  border: 1px solid rgba(129,212,250,0.18);
   font-family: var(--font-mono);
   font-size: 0.55rem;
   letter-spacing: 0.1em;
@@ -722,7 +763,7 @@ a { color: inherit; text-decoration: none; }
   transform: translate(-50%,-50%);
   width: 600px; height: 600px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(139,0,0,0.045) 0%, transparent 60%);
+  background: radial-gradient(circle, rgba(129,212,250,0.035) 0%, transparent 60%);
   pointer-events: none;
 }
 
@@ -758,8 +799,8 @@ a { color: inherit; text-decoration: none; }
 }
 .skill-item:hover::before { transform: scaleX(1); }
 .skill-item:hover {
-  border-color: rgba(139,0,0,0.35);
-  background-color: rgba(139,0,0,0.04);
+  border-color: rgba(129,212,250,0.25);
+  background-color: rgba(129,212,250,0.04);
   transform: translateY(-3px);
 }
 
@@ -838,8 +879,8 @@ a { color: inherit; text-decoration: none; }
   transition: border-color var(--t-fast), background-color var(--t-fast);
 }
 .contact-item:hover .contact-icon {
-  border-color: var(--red);
-  background-color: rgba(139,0,0,0.1);
+  border-color: var(--red-bright);
+  background-color: rgba(129,212,250,0.08);
 }
 .contact-icon svg { color: var(--red-bright); }
 
@@ -865,7 +906,7 @@ a { color: inherit; text-decoration: none; }
   right: -20%; top: 15%;
   width: 500px; height: 500px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(139,0,0,0.1) 0%, transparent 60%);
+  background: radial-gradient(circle, rgba(129,212,250,0.07) 0%, transparent 60%);
   pointer-events: none;
 }
 
@@ -904,7 +945,7 @@ a { color: inherit; text-decoration: none; }
     top: 0; right: 0;
     height: 100vh;
     width: 260px;
-    background: #080000;
+    background: #060C18;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
@@ -943,7 +984,7 @@ a { color: inherit; text-decoration: none; }
     border: none;
     border-top: 1px solid var(--grey-border);
     padding: 0;
-    background: rgba(139,0,0,0.06);
+    background: rgba(129,212,250,0.04);
     /* height-based accordion */
     max-height: 0;
     overflow: hidden;
@@ -1010,4 +1051,218 @@ a { color: inherit; text-decoration: none; }
     opacity: 1;
     transform: none;
   }
+}
+
+/* ===== ABOUT TABS & SLIDER ===================================
+   Tab filter: Education | Venture
+   Each tab has a slider (carousel) that auto-paginates content.
+   Data-driven: add items to the JS array, HTML updates itself.
+============================================================ */
+
+/* Tab buttons */
+.about-tabs {
+  display: flex;
+  gap: 0;
+  margin-top: 2.5rem;
+  border-bottom: 1px solid var(--grey-border);
+}
+.about-tab-btn {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--white-dim);
+  padding: 0.65rem 1.4rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--t-fast), border-color var(--t-fast);
+  touch-action: manipulation;
+}
+.about-tab-btn:hover { color: var(--white); }
+.about-tab-btn.active {
+  color: var(--red-bright);
+  border-bottom-color: var(--red-bright);
+}
+
+/* Slider wrapper */
+.about-slider-wrap {
+  margin-top: 1.8rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* The track — slides sit side-by-side, translated with transform */
+.about-slider-track {
+  display: flex;
+  transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+/* Each "page" — fixed width = 100% of wrapper */
+.about-slide {
+  min-width: 100%;
+  box-sizing: border-box;
+  padding: 1.8rem 2rem;
+  background: rgba(129,212,250,0.03);
+  border: 1px solid var(--grey-border);
+  position: relative;
+}
+.about-slide::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(129,212,250,0.25), transparent);
+}
+
+/* Slide content layout */
+.slide-period {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--red-bright);
+  margin-bottom: 0.5rem;
+}
+.slide-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  letter-spacing: 0.05em;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 0.35rem;
+}
+.slide-subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--white-dim);
+  margin-bottom: 1rem;
+}
+.slide-desc {
+  font-size: 0.95rem;
+  color: var(--white-dim);
+  line-height: 1.75;
+  font-weight: 300;
+}
+.slide-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1.1rem;
+}
+.slide-tags span {
+  padding: 0.25rem 0.75rem;
+  background: rgba(129,212,250,0.07);
+  border: 1px solid rgba(129,212,250,0.15);
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--red-bright);
+  border-radius: 2px;
+}
+
+/* Founder badge — special callout inside Venture slides */
+.slide-founder-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(129,212,250,0.08);
+  border: 1px solid rgba(129,212,250,0.22);
+  padding: 0.3rem 0.9rem;
+  margin-bottom: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--red-bright);
+}
+.slide-founder-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--red-bright);
+  box-shadow: 0 0 6px var(--red-bright);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* Slider navigation */
+.about-slider-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+/* Dot indicators */
+.about-slider-dots {
+  display: flex;
+  gap: 0.5rem;
+}
+.slider-dot {
+  width: 18px; height: 2px;
+  background: var(--grey-border);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background var(--t-fast), width var(--t-fast);
+  touch-action: manipulation;
+}
+.slider-dot.active {
+  background: var(--red-bright);
+  width: 32px;
+}
+
+/* Prev / Next arrows */
+.about-slider-arrows {
+  display: flex;
+  gap: 0.5rem;
+}
+.slider-arrow {
+  width: 34px; height: 34px;
+  border: 1px solid var(--grey-border);
+  background: none;
+  color: var(--white-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color var(--t-fast), color var(--t-fast), background var(--t-fast);
+  touch-action: manipulation;
+}
+.slider-arrow:hover {
+  border-color: var(--red-bright);
+  color: var(--red-bright);
+  background: rgba(129,212,250,0.06);
+}
+.slider-arrow:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+.slider-arrow svg { width: 14px; height: 14px; pointer-events: none; }
+
+/* Page counter */
+.slider-counter {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  color: var(--white-dim);
+}
+
+/* Tab panel visibility */
+.about-tab-panel { display: none; }
+.about-tab-panel.active { display: block; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .about-slide { padding: 1.2rem 1rem; }
+  .slide-title { font-size: 1.3rem; }
 }

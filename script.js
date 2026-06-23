@@ -236,3 +236,195 @@
   }
 
 })();
+
+/* ─────────────────────────────────────────────
+   7. ABOUT TABS + SLIDER — data-driven via data.json
+   Edit konten di Google Sheets, bukan di sini.
+   File ini hanya berisi logika render.
+───────────────────────────────────────────── */
+(function () {
+  'use strict';
+
+  function buildSlider(ABOUT_DATA) {
+
+    /* ── Collect unique tab names in order ── */
+    var tabNames = [];
+    ABOUT_DATA.forEach(function (item) {
+      if (tabNames.indexOf(item.tab) === -1) tabNames.push(item.tab);
+    });
+
+    var tabsEl   = document.getElementById('aboutTabs');
+    var panelsEl = document.getElementById('aboutPanels');
+    if (!tabsEl || !panelsEl) return;
+
+    /* Clear loading state */
+    panelsEl.innerHTML = '';
+    tabsEl.innerHTML   = '';
+
+    /* ── Build HTML ── */
+    tabNames.forEach(function (tabName, tIdx) {
+      /* Tab button */
+      var btn = document.createElement('button');
+      btn.className   = 'about-tab-btn' + (tIdx === 0 ? ' active' : '');
+      btn.textContent = tabName;
+      btn.setAttribute('role', 'tab');
+      btn.setAttribute('aria-selected', tIdx === 0 ? 'true' : 'false');
+      btn.setAttribute('data-tab', tabName);
+      tabsEl.appendChild(btn);
+
+      /* Panel */
+      var panel = document.createElement('div');
+      panel.className = 'about-tab-panel' + (tIdx === 0 ? ' active' : '');
+      panel.setAttribute('role', 'tabpanel');
+      panel.setAttribute('data-panel', tabName);
+
+      /* Slides for this tab */
+      var slides = ABOUT_DATA.filter(function (d) { return d.tab === tabName; });
+
+      /* Slider structure */
+      var wrap  = document.createElement('div');
+      wrap.className = 'about-slider-wrap';
+
+      var track = document.createElement('div');
+      track.className = 'about-slider-track';
+
+      slides.forEach(function (slide) {
+        var s = document.createElement('div');
+        s.className = 'about-slide';
+
+        var founderBadge = slide.founder
+          ? '<div class="slide-founder-badge"><span class="slide-founder-dot"></span>Founder</div>'
+          : '';
+
+        var tagsHtml = (slide.tags || []).map(function (t) {
+          return '<span>' + t + '</span>';
+        }).join('');
+
+        s.innerHTML =
+          '<div class="slide-period">' + slide.period + '</div>' +
+          founderBadge +
+          '<div class="slide-title">' + slide.title + '</div>' +
+          '<div class="slide-subtitle">' + slide.subtitle + '</div>' +
+          '<p class="slide-desc">' + slide.desc + '</p>' +
+          (tagsHtml ? '<div class="slide-tags">' + tagsHtml + '</div>' : '');
+
+        track.appendChild(s);
+      });
+
+      wrap.appendChild(track);
+
+      /* Navigation row */
+      var nav       = document.createElement('div');
+      nav.className = 'about-slider-nav';
+
+      var dotsWrap       = document.createElement('div');
+      dotsWrap.className = 'about-slider-dots';
+
+      var counter       = document.createElement('span');
+      counter.className = 'slider-counter';
+
+      var arrowsWrap       = document.createElement('div');
+      arrowsWrap.className = 'about-slider-arrows';
+
+      var prevBtn = document.createElement('button');
+      prevBtn.className = 'slider-arrow';
+      prevBtn.setAttribute('aria-label', 'Previous');
+      prevBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>';
+
+      var nextBtn = document.createElement('button');
+      nextBtn.className = 'slider-arrow';
+      nextBtn.setAttribute('aria-label', 'Next');
+      nextBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
+
+      arrowsWrap.appendChild(prevBtn);
+      arrowsWrap.appendChild(nextBtn);
+
+      var dots = [];
+      slides.forEach(function (_, i) {
+        var dot = document.createElement('button');
+        dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+        dots.push(dot);
+        dotsWrap.appendChild(dot);
+      });
+
+      nav.appendChild(dotsWrap);
+      nav.appendChild(counter);
+      nav.appendChild(arrowsWrap);
+      wrap.appendChild(nav);
+      panel.appendChild(wrap);
+      panelsEl.appendChild(panel);
+
+      /* ── Slider logic ── */
+      var current = 0;
+      var total   = slides.length;
+
+      function goTo(idx) {
+        current = Math.max(0, Math.min(idx, total - 1));
+        track.style.transform = 'translateX(-' + (current * 100) + '%)';
+        dots.forEach(function (d, i) { d.classList.toggle('active', i === current); });
+        counter.textContent  = (current + 1) + ' / ' + total;
+        prevBtn.disabled     = current === 0;
+        nextBtn.disabled     = current === total - 1;
+      }
+
+      prevBtn.addEventListener('click', function () { goTo(current - 1); });
+      nextBtn.addEventListener('click', function () { goTo(current + 1); });
+      dots.forEach(function (dot, i) {
+        dot.addEventListener('click', function () { goTo(i); });
+      });
+
+      /* Touch swipe */
+      var touchStartX = 0;
+      wrap.addEventListener('touchstart', function (e) {
+        touchStartX = e.touches[0].clientX;
+      }, { passive: true });
+      wrap.addEventListener('touchend', function (e) {
+        var diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
+      }, { passive: true });
+
+      goTo(0);
+    });
+
+    /* ── Tab switching ── */
+    var allBtns   = tabsEl.querySelectorAll('.about-tab-btn');
+    var allPanels = panelsEl.querySelectorAll('.about-tab-panel');
+
+    allBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var target = btn.getAttribute('data-tab');
+        allBtns.forEach(function (b) {
+          b.classList.toggle('active', b.getAttribute('data-tab') === target);
+          b.setAttribute('aria-selected', b.getAttribute('data-tab') === target ? 'true' : 'false');
+        });
+        allPanels.forEach(function (p) {
+          p.classList.toggle('active', p.getAttribute('data-panel') === target);
+        });
+      });
+    });
+  }
+
+  /* ── Fetch data.json — no hardcode, sumber kebenaran ada di Sheets ── */
+  var panelsEl = document.getElementById('aboutPanels');
+  if (panelsEl) {
+    panelsEl.innerHTML = '<p style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;color:var(--white-dim);padding:1.5rem 0;">Loading...</p>';
+  }
+
+  fetch('data.json?v=' + Date.now()) /* cache-bust supaya selalu fresh */
+    .then(function (res) {
+      if (!res.ok) throw new Error('data.json not found');
+      return res.json();
+    })
+    .then(function (data) {
+      buildSlider(data);
+    })
+    .catch(function (err) {
+      console.warn('Portfolio CMS: gagal load data.json —', err.message);
+      /* Fallback: render kosong dengan pesan */
+      if (panelsEl) {
+        panelsEl.innerHTML = '<p style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;color:var(--white-dim);padding:1.5rem 0;">Content unavailable.</p>';
+      }
+    });
+
+})();
