@@ -172,14 +172,20 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* PERF: transition only opacity + padding (no layout-triggering props) */
-  transition: background var(--t-normal), padding var(--t-fast);
+  transition: background var(--t-normal), padding var(--t-fast), backdrop-filter var(--t-normal);
+  /* Glass default — transparan saat di top */
+  background: rgba(8, 13, 24, 0.15);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
 }
 .nav.scrolled {
-  /* Solid dark bg instead of backdrop-filter blur */
-  background: rgba(5, 5, 5, 0.95);
+  /* Glass effect saat scroll — Acrylic/Mica style */
+  background: rgba(8, 13, 24, 0.55);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   padding: 0.9rem 2.5rem;
-  border-bottom: 1px solid var(--grey-border);
+  border-bottom: 1px solid rgba(129, 212, 250, 0.08);
+  box-shadow: 0 1px 0 rgba(129, 212, 250, 0.04), 0 4px 24px rgba(0,0,0,0.3);
 }
 
 .nav-logo {
@@ -948,7 +954,9 @@ a { color: inherit; text-decoration: none; }
     top: 0; right: 0;
     height: 100vh;
     width: 260px;
-    background: #060C18;
+    background: rgba(8, 13, 24, 0.75);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
@@ -956,7 +964,7 @@ a { color: inherit; text-decoration: none; }
     gap: 0;
     transform: translateX(100%);
     transition: transform var(--t-normal);
-    border-left: 1px solid var(--grey-border);
+    border-left: 1px solid rgba(129, 212, 250, 0.10);
     z-index: 1000;
     overflow-y: auto;
   }
