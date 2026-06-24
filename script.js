@@ -405,23 +405,40 @@
     });
   }
 
-  /* ── Fetch data.json — no hardcode, sumber kebenaran ada di Sheets ── */
+  /* ── Fetch data.json — sumber kebenaran ada di Sheets ── */
   var panelsEl = document.getElementById('aboutPanels');
   if (panelsEl) {
     panelsEl.innerHTML = '<p style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;color:var(--white-dim);padding:1.5rem 0;">Loading...</p>';
   }
 
-  fetch('data.json?v=' + Date.now()) /* cache-bust supaya selalu fresh */
+  fetch('data.json?v=' + Date.now())
     .then(function (res) {
       if (!res.ok) throw new Error('data.json not found');
       return res.json();
     })
     .then(function (data) {
-      buildSlider(data);
+
+      /* ── 1. Bio — style dikunci di CSS, hanya teks yang dari data ── */
+      var bioEl = document.getElementById('aboutBio');
+      if (bioEl && data.bio) {
+        bioEl.textContent = data.bio;
+        /* Pastikan tidak ada inline style yang bisa override */
+        bioEl.removeAttribute('style');
+      }
+
+      /* ── 2. Tags ── */
+      var tagsEl = document.getElementById('aboutTags2');
+      if (tagsEl && data.tags && data.tags.length) {
+        tagsEl.innerHTML = data.tags.map(function (t) {
+          return '<span>' + t + '</span>';
+        }).join('');
+      }
+
+      /* ── 3. Slides (Education / Venture dst) ── */
+      buildSlider(data.slides || data);
     })
     .catch(function (err) {
       console.warn('Portfolio CMS: gagal load data.json —', err.message);
-      /* Fallback: render kosong dengan pesan */
       if (panelsEl) {
         panelsEl.innerHTML = '<p style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;color:var(--white-dim);padding:1.5rem 0;">Content unavailable.</p>';
       }
