@@ -107,7 +107,7 @@
     or as a single linked file (no @import chains). One file, no @import.
   -->
   <link rel="stylesheet" href="style.css" />
-  <link rel="icon" type="image/svg+xml" href="images/favicon.webp">
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
 </head>
 <body>
 
@@ -273,7 +273,7 @@
             <!-- Tab buttons injected by JS -->
           </div>
 
-          <!-- ── TAB PANELS ── each panel contains a slider, built by JS -->\
+          <!-- ── TAB PANELS ── each panel contains a slider, built by JS -->
           <div id="aboutPanels"></div>
         </div>
 
@@ -289,85 +289,8 @@
         <h2 class="section-title">Selected<br /><em>Projects</em></h2>
       </div>
 
-      <div class="projects-grid">
-
-        <!--
-          PROJECT CARDS
-          PERF: All project images use loading="lazy" — they are below the fold.
-          PERF: card-hover-glow div is removed; hover effect is now CSS-only
-                using a pseudo-element, eliminating JS mousemove overhead on mobile.
-          Replace each src path with your compressed JPG (≤ 150 KB per image).
-        -->
-
-        <article class="project-card reveal-up delay-1">
-          <div class="card-img-wrap">
-            <img src="/images/project-short-movie.webp" alt="Short Movie Project"
-                 class="card-img" loading="lazy" decoding="async"
-                 onerror="this.style.display='none'" />
-            <div class="card-img-fallback" aria-hidden="true">FILM</div>
-          </div>
-          <div class="card-body">
-            <span class="card-num">01</span>
-            <h3 class="card-title">
-              <a href="https://youtu.be/avhV3ijq3Wo?si=BxqTCy33pLTavyVy" target="_blank">
-                   GARIS SKETSA <br /> [ORIGINAL SHORT MOVIE BY MKV PRODUCTION] 
-              </a>
-            </h3>
-            <p class="card-desc">A short movie about school life that tells the story of interactions, friendships, and the emotional journey of teenagers within a school environment.</p>
-            <div class="card-tags">
-              <span>Director</span>
-              <span>Cinematographer</span>
-              <span>Camera Operator</span>
-              <span>Editor</span>
-              <span>Sound Design</span></div>
-          </div>
-        </article>
-
-        <article class="project-card reveal-up delay-2">
-          <div class="card-img-wrap">
-            <img src="/images/film-sunan-gunung-jati.webp" alt="School Event Cinematic"
-                 class="card-img" loading="lazy" decoding="async"
-                 onerror="this.style.display='none'" />
-            <div class="card-img-fallback" aria-hidden="true">EVENT</div>
-          </div>
-          <div class="card-body">
-            <span class="card-num">02</span>
-            <h3 class="card-title">
-              <a href="https://youtu.be/557VqLx9V00?si=VZe_Fhbdv8PCZBTK" target="_blank">
-                SUNAN GUNUNG JATI: TARI TOPENG SENJATA DAKWAH ISLAM <br />FULL MOVIE | SCIOFELTIUM
-              </a>
-            </h3>
-            <p class="card-desc">Tells the story of Sunan Gunung Jati’s journey in spreading Islamic teachings through traditional Topeng dance performances with strong cultural elements.</p>
-            <div class="card-tags">
-              <span>Videography</span>
-              <span>Editor</span>
-              <span>Camera Operator</span>
-            </div>
-          </div>
-        </article>
-
-         <article class="project-card reveal-up delay-2">
-          <div class="card-img-wrap">
-            <img src="/images/tari-kolosal.webp" alt="School Event Cinematic"
-                 class="card-img" loading="lazy" decoding="async"
-                 onerror="this.style.display='none'" />
-            <div class="card-img-fallback" aria-hidden="true">TARI KOLOSAL</div>
-          </div>
-          <div class="card-body">
-            <span class="card-num">02</span>
-            <h3 class="card-title">
-              <a href="https://youtu.be/557VqLx9V00?si=k19SzPaJYBRbHosl" target="_blank">
-                Tarian Kolosal P5RA Tema Bhineka Tunggal Ika Fase F  <br />TP. 2024/2025_Kelas 11.2
-              </a>
-            </h3>
-            <p class="card-desc">Tells the story of Sunan Gunung Jati’s journey in spreading Islamic teachings through traditional Topeng dance performances with strong cultural elements.</p>
-            <div class="card-tags">
-              <span>Videography</span>
-              <span>Editor</span>
-              <span>Camera Operator</span>
-            </div>
-          </div>
-        </article>
+      <div class="projects-grid" id="projectsGrid">
+        <!-- Rendered by JS from Apps Script -->
       </div>
     </div>
   </section>
@@ -379,65 +302,10 @@
         <p class="section-label">— Toolkit</p>
         <h2 class="section-title">Skills &amp;<br /><em>Expertise</em></h2>
       </div>
-      <div class="skills-grid">
-
-        <div class="skill-item reveal-up delay-1">
-          <div class="skill-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
-          </div>
-          <h3 class="skill-name">Video Editing</h3>
-          <p class="skill-desc">Precise cuts, pacing, and narrative rhythm for compelling visual stories.</p>
-        </div>
-
-        <div class="skill-item reveal-up delay-2">
-          <div class="skill-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-          </div>
-          <h3 class="skill-name">CapCut</h3>
-          <p class="skill-desc">Fast mobile and desktop editing for social-first content and reels.</p>
-        </div>
-
-        <div class="skill-item reveal-up delay-3">
-          <div class="skill-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-          </div>
-          <h3 class="skill-name">Canva</h3>
-          <p class="skill-desc">Polished graphic design, presentations, and brand visual assets.</p>
-        </div>
-
-        <div class="skill-item reveal-up delay-1">
-          <div class="skill-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-          <h3 class="skill-name">CorelDRAW</h3>
-          <p class="skill-desc">Vector illustration, logo design, and professional print layouts.</p>
-        </div>
-
-        <div class="skill-item reveal-up delay-2">
-          <div class="skill-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-          </div>
-          <h3 class="skill-name">Microsoft Office</h3>
-          <p class="skill-desc">Documentation, reporting, and presentation for professional workflows.</p>
-        </div>
-
-        <div class="skill-item reveal-up delay-3">
-          <div class="skill-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          </div>
-          <h3 class="skill-name">Digital Media</h3>
-          <p class="skill-desc">Multi-platform content strategy — from concept to digital distribution.</p>
-        </div>
-
-        <div class="skill-item reveal-up delay-1">
-          <div class="skill-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-          </div>
-          <h3 class="skill-name">Creative Direction</h3>
-          <p class="skill-desc">Conceptual vision, mood setting, and aesthetic decision-making for every project.</p>
-        </div>
-
+      <div class="skills-grid" id="skillsGrid">
+        <!-- Rendered by JS from Apps Script -->
       </div>
+
     </div>
   </section>
 

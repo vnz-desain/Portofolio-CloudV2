@@ -305,7 +305,7 @@
           founderBadge +
           '<div class="slide-title">' + slide.title + '</div>' +
           '<div class="slide-subtitle">' + slide.subtitle + '</div>' +
-          '<p class="slide-desc">' + slide.desc + '</p>' +
+          '<p class="slide-desc">' + slide.body + '</p>' +
           (tagsHtml ? '<div class="slide-tags">' + tagsHtml + '</div>' : '');
 
         track.appendChild(s);
@@ -405,43 +405,167 @@
     });
   }
 
-  /* ── Fetch data.json — sumber kebenaran ada di Sheets ── */
-  var panelsEl = document.getElementById('aboutPanels');
-  if (panelsEl) {
-    panelsEl.innerHTML = '<p style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;color:var(--white-dim);padding:1.5rem 0;">Loading...</p>';
+  /* ══════════════════════════════════════════════════════
+     SUPABASE CLIENT — fetch semua data portfolio
+     Public anon key — aman untuk static site (read-only RLS)
+  ══════════════════════════════════════════════════════ */
+  var SUPABASE_URL = 'https://ocedszxukzrnmvrecrnx.supabase.co';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9jZWRzenh1a3pybm12cmVjcm54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMjI4ODAsImV4cCI6MjA5Nzg5ODg4MH0.fxgMdyZlbp0V20oSvI6ZgnZNgWFh4g0iHMI4SxYLkkE';
+
+  function sbFetch(table, params) {
+    var url = SUPABASE_URL + '/rest/v1/' + table + '?select=*&order=sort_order.asc';
+    if (params) url += '&' + params;
+    return fetch(url, {
+      headers: {
+        'apikey'       : SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY
+      }
+    }).then(function (r) {
+      if (!r.ok) throw new Error(table + ' fetch failed: ' + r.status);
+      return r.json();
+    });
   }
 
-  fetch('data.json?v=' + Date.now())
-    .then(function (res) {
-      if (!res.ok) throw new Error('data.json not found');
-      return res.json();
-    })
-    .then(function (data) {
+  /* Loading states */
+  var panelsEl     = document.getElementById('aboutPanels');
+  var skillsGridEl = document.getElementById('skillsGrid');
+  var projectsEl   = document.getElementById('projectsGrid');
+  var loadingHTML  = '<p style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;color:var(--white-dim);padding:1.5rem 0;">Loading...</p>';
+  if (panelsEl)     panelsEl.innerHTML     = loadingHTML;
+  if (skillsGridEl) skillsGridEl.innerHTML = loadingHTML;
+  if (projectsEl)   projectsEl.innerHTML   = loadingHTML;
 
-      /* ── 1. Bio — style dikunci di CSS, hanya teks yang dari data ── */
-      var bioEl = document.getElementById('aboutBio');
-      if (bioEl && data.bio) {
-        bioEl.textContent = data.bio;
-        /* Pastikan tidak ada inline style yang bisa override */
-        bioEl.removeAttribute('style');
-      }
+  /* Fetch semua tabel paralel */
+  Promise.all([
+    sbFetch('about', 'limit=1'),
+    sbFetch('slides'),
+    sbFetch('skills'),
+    sbFetch('projects')
+  ])
+  .then(function (results) {
+    var about    = results[0][0] || {};
+    var slides   = results[1]    || [];
+    var skills   = results[2]    || [];
+    var projects = results[3]    || [];
 
-      /* ── 2. Tags ── */
-      var tagsEl = document.getElementById('aboutTags2');
-      if (tagsEl && data.tags && data.tags.length) {
-        tagsEl.innerHTML = data.tags.map(function (t) {
-          return '<span>' + t + '</span>';
-        }).join('');
-      }
+    /* ── 1. Bio ── */
+    var bioEl = document.getElementById('aboutBio');
+    if (bioEl && about.bio) {
+      bioEl.textContent = about.bio;
+      bioEl.removeAttribute('style');
+    }
 
-      /* ── 3. Slides (Education / Venture dst) ── */
-      buildSlider(data.slides || data);
-    })
-    .catch(function (err) {
-      console.warn('Portfolio CMS: gagal load data.json —', err.message);
-      if (panelsEl) {
-        panelsEl.innerHTML = '<p style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;color:var(--white-dim);padding:1.5rem 0;">Content unavailable.</p>';
-      }
-    });
+    /* ── 2. About Tags ── */
+    var tagsEl = document.getElementById('aboutTags2');
+    if (tagsEl && about.tags && about.tags.length) {
+      tagsEl.innerHTML = about.tags.map(function (t) {
+        return '<span>' + t + '</span>';
+      }).join('');
+    }
+
+    /* ── 3. Slides ── */
+    buildSlider(slides);
+
+    /* ── 4. Skills ── */
+    renderSkills(skills);
+
+    /* ── 5. Projects ── */
+    renderProjects(projects);
+  })
+  .catch(function (err) {
+    console.warn('Portfolio CMS error:', err.message);
+    var errHTML = '<p style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;color:var(--white-dim);padding:1.5rem 0;">Content unavailable.</p>';
+    if (panelsEl)     panelsEl.innerHTML     = errHTML;
+    if (skillsGridEl) skillsGridEl.innerHTML = errHTML;
+    if (projectsEl)   projectsEl.innerHTML   = errHTML;
+  });
+
+  /* ══════════════════════════════════════════════════════
+     ICONS — SVG path data by name
+     Nama ini yang diketik di kolom "icon" di sheet Skills
+  ══════════════════════════════════════════════════════ */
+  var ICONS = {
+    'video-editing'   : '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>',
+    'film'            : '<rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/>',
+    'monitor'         : '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
+    'smartphone'      : '<rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>',
+    'layers'          : '<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>',
+    'pen-tool'        : '<path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/>',
+    'star'            : '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+    'file-text'       : '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
+    'home'            : '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+    'globe'           : '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+    'camera'          : '<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',
+    'image'           : '<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>',
+    'music'           : '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+    'mic'             : '<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>',
+    'code'            : '<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
+    'settings'        : '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+    'layout'          : '<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>',
+    'edit'            : '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>',
+    'share'           : '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>',
+    'trending-up'     : '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
+    'zap'             : '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+    'aperture'        : '<circle cx="12" cy="12" r="10"/><line x1="14.31" y1="8" x2="20.05" y2="17.94"/><line x1="9.69" y1="8" x2="21.17" y2="8"/><line x1="7.38" y1="12" x2="13.12" y2="2.06"/><line x1="9.69" y1="16" x2="3.95" y2="6.06"/><line x1="14.31" y1="16" x2="2.83" y2="16"/><line x1="16.62" y1="12" x2="10.88" y2="21.94"/>'
+  };
+
+  function getIconSVG(iconName) {
+    var key     = (iconName || '').toLowerCase().trim();
+    var paths   = ICONS[key] || ICONS['star'];
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">' + paths + '</svg>';
+  }
+
+  /* ── Render Skills ─────────────────────────────────────── */
+  function renderSkills(skills) {
+    var grid = document.getElementById('skillsGrid');
+    if (!grid) return;
+    if (!skills.length) { grid.innerHTML = ''; return; }
+    var delays = ['delay-1','delay-2','delay-3'];
+    grid.innerHTML = skills.map(function (s, i) {
+      return [
+        '<div class="skill-item reveal-up ' + delays[i % 3] + '">',
+        '  <div class="skill-icon">' + getIconSVG(s.icon) + '</div>',
+        '  <h3 class="skill-name">' + s.name + '</h3>',
+        '  <p class="skill-desc">' + (s.body || '') + '</p>',
+        '</div>'
+      ].join('\n');
+    }).join('\n');
+    if (typeof observeReveal === 'function') observeReveal();
+  }
+
+  function renderProjects(projects) {
+    var grid = document.getElementById('projectsGrid');
+    if (!grid) return;
+    if (!projects.length) { grid.innerHTML = ''; return; }
+    var delays = ['delay-1','delay-2','delay-3'];
+    grid.innerHTML = projects.map(function (p, i) {
+      var tagsHtml = (p.tags || []).map(function (t) {
+        return '<span>' + t + '</span>';
+      }).join('');
+      var num      = p.num || String(i + 1).padStart(2, '0');
+      var imgHtml  = p.image_url
+        ? '<img src="' + p.image_url + '" alt="' + p.title + '" class="card-img" loading="lazy" decoding="async" onerror="this.style.display=\'none\'" />'
+        : '';
+      var fallback    = p.fallback || p.title.substring(0, 6).toUpperCase();
+      var titleInner  = p.link
+        ? '<a href="' + p.link + '" target="_blank" rel="noopener">' + p.title + '</a>'
+        : p.title;
+      return [
+        '<article class="project-card reveal-up ' + delays[i % 3] + '">',
+        '  <div class="card-img-wrap">',
+        '    ' + imgHtml,
+        '    <div class="card-img-fallback" aria-hidden="true">' + fallback + '</div>',
+        '  </div>',
+        '  <div class="card-body">',
+        '    <span class="card-num">' + num + '</span>',
+        '    <h3 class="card-title">' + titleInner + '</h3>',
+        '    <p class="card-desc">' + (p.body || '') + '</p>',
+        '    <div class="card-tags">' + tagsHtml + '</div>',
+        '  </div>',
+        '</article>'
+      ].join('\n');
+    }).join('\n');
+    if (typeof observeReveal === 'function') observeReveal();
+  }
 
 })();
