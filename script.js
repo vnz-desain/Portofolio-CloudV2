@@ -154,7 +154,15 @@
           });
         }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
       }
-      els.forEach(function (el) { revealObs.observe(el); });
+      els.forEach(function (el) {
+        /* Kalau elemen sudah di atas viewport atau dalam viewport, langsung visible */
+        var rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight) {
+          el.classList.add('visible');
+        } else {
+          revealObs.observe(el);
+        }
+      });
     } else {
       els.forEach(function (el) { el.classList.add('visible'); });
     }
@@ -533,7 +541,8 @@
         '</div>'
       ].join('\n');
     }).join('\n');
-    if (typeof observeReveal === 'function') observeReveal();
+    /* Delay biar browser sempat layout dulu sebelum observe */
+    setTimeout(observeReveal, 100);
   }
 
   function renderProjects(projects) {
@@ -568,7 +577,7 @@
         '</article>'
       ].join('\n');
     }).join('\n');
-    if (typeof observeReveal === 'function') observeReveal();
+    setTimeout(observeReveal, 100);
   }
 
 })();
