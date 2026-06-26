@@ -168,6 +168,9 @@
     }
   }
 
+  /* Expose ke global supaya bisa dipanggil dari IIFE lain */
+  window.observeReveal = observeReveal;
+
   // Initial observe on page load
   observeReveal();
 
