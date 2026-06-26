@@ -133,33 +133,35 @@
      PERF: Single observer instance; unobserve after first reveal.
      will-change removed via transitionend to free GPU memory.
   ───────────────────────────────────────────── */
-  const revealEls = document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right');
+  var revealObs = null;
 
-  if ('IntersectionObserver' in window) {
-    const revealObs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        const el = entry.target;
-        el.classList.add('visible');
-        revealObs.unobserve(el);
+  function observeReveal() {
+    var els = document.querySelectorAll('.reveal-up:not(.visible), .reveal-left:not(.visible), .reveal-right:not(.visible)');
+    if (!els.length) return;
 
-        // PERF: After the transition finishes, remove will-change so the
-        // browser can reclaim the promoted compositor layer.
-        el.addEventListener('transitionend', function cleanup() {
-          el.style.willChange = 'auto';
-          el.removeEventListener('transitionend', cleanup);
-        }, { once: true });
-      });
-    }, {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    });
-
-    revealEls.forEach(function (el) { revealObs.observe(el); });
-  } else {
-    // Fallback for very old browsers — show everything immediately
-    revealEls.forEach(function (el) { el.classList.add('visible'); });
+    if ('IntersectionObserver' in window) {
+      if (!revealObs) {
+        revealObs = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var el = entry.target;
+            el.classList.add('visible');
+            revealObs.unobserve(el);
+            el.addEventListener('transitionend', function cleanup() {
+              el.style.willChange = 'auto';
+              el.removeEventListener('transitionend', cleanup);
+            }, { once: true });
+          });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+      }
+      els.forEach(function (el) { revealObs.observe(el); });
+    } else {
+      els.forEach(function (el) { el.classList.add('visible'); });
+    }
   }
+
+  // Initial observe on page load
+  observeReveal();
 
   /* ─────────────────────────────────────────────
      3. HERO ENTRANCE — trigger immediately
