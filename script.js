@@ -534,25 +534,21 @@
     var grid = document.getElementById('skillsGrid');
     if (!grid) return;
     if (!skills.length) { grid.innerHTML = ''; return; }
-    var delays = ['delay-1','delay-2','delay-3'];
-    grid.innerHTML = skills.map(function (s, i) {
+    grid.innerHTML = skills.map(function (s) {
       return [
-        '<div class="skill-item reveal-up ' + delays[i % 3] + '">',
+        '<div class="skill-item">',
         '  <div class="skill-icon">' + getIconSVG(s.icon) + '</div>',
         '  <h3 class="skill-name">' + s.name + '</h3>',
         '  <p class="skill-desc">' + (s.body || '') + '</p>',
         '</div>'
       ].join('\n');
     }).join('\n');
-    /* Delay biar browser sempat layout dulu sebelum observe */
-    setTimeout(observeReveal, 100);
   }
 
   function renderProjects(projects) {
     var grid = document.getElementById('projectsGrid');
     if (!grid) return;
     if (!projects.length) { grid.innerHTML = ''; return; }
-    var delays = ['delay-1','delay-2','delay-3'];
     grid.innerHTML = projects.map(function (p, i) {
       var tagsHtml = (p.tags || []).map(function (t) {
         return '<span>' + t + '</span>';
@@ -566,7 +562,7 @@
         ? '<a href="' + p.link + '" target="_blank" rel="noopener">' + p.title + '</a>'
         : p.title;
       return [
-        '<article class="project-card reveal-up ' + delays[i % 3] + '">',
+        '<article class="project-card">',
         '  <div class="card-img-wrap">',
         '    ' + imgHtml,
         '    <div class="card-img-fallback" aria-hidden="true">' + fallback + '</div>',
