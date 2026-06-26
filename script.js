@@ -412,9 +412,10 @@
   var SUPABASE_URL = 'https://ocedszxukzrnmvrecrnx.supabase.co';
   var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9jZWRzenh1a3pybm12cmVjcm54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMjI4ODAsImV4cCI6MjA5Nzg5ODg4MH0.fxgMdyZlbp0V20oSvI6ZgnZNgWFh4g0iHMI4SxYLkkE';
 
-  function sbFetch(table, params) {
-    var url = SUPABASE_URL + '/rest/v1/' + table + '?select=*&order=sort_order.asc';
-    if (params) url += '&' + params;
+  function sbFetch(table, customOrder, extraParams) {
+    var order = customOrder || 'sort_order.asc';
+    var url = SUPABASE_URL + '/rest/v1/' + table + '?select=*&order=' + order;
+    if (extraParams) url += '&' + extraParams;
     return fetch(url, {
       headers: {
         'apikey'       : SUPABASE_KEY,
@@ -437,10 +438,10 @@
 
   /* Fetch semua tabel paralel */
   Promise.all([
-    sbFetch('about', 'limit=1'),
-    sbFetch('slides'),
-    sbFetch('skills'),
-    sbFetch('projects')
+    sbFetch('about', 'id.asc', 'limit=1'),
+    sbFetch('slides', 'tab.asc,sort_order.asc'),
+    sbFetch('skills', 'sort_order.asc'),
+    sbFetch('projects', 'sort_order.asc')
   ])
   .then(function (results) {
     var about    = results[0][0] || {};
