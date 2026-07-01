@@ -44,8 +44,15 @@
   box-shadow: 0 6px 32px rgba(79, 195, 247, 0.3), 0 0 0 6px rgba(79, 195, 247, 0.08);
   animation: none;
 }
-.siesta-bubble svg { color: var(--si-accent); flex-shrink: 0; }
-.siesta-bubble .siesta-close-icon { display: none; }
+.siesta-bubble .siesta-close-icon { color: var(--si-accent); flex-shrink: 0; display: none; }
+.siesta-chat-icon {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.siesta-chat-icon svg { width: 100%; height: 100%; display: block; }
 .siesta-bubble.open .siesta-chat-icon  { display: none; }
 .siesta-bubble.open .siesta-close-icon { display: block; }
 .siesta-bubble.open { animation: none; }
@@ -111,14 +118,14 @@
 .siesta-avatar {
   width: 34px; height: 34px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0f1f3d, #162447);
   border: 1px solid var(--si-border-h);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 1rem;
+  overflow: hidden;
 }
+.siesta-avatar svg { width: 100%; height: 100%; display: block; }
 .siesta-header-info { flex: 1; min-width: 0; }
 .siesta-name {
   font-family: 'Space Mono', monospace;
