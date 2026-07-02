@@ -148,18 +148,20 @@
      - Toleransi typo ringan via Levenshtein
      - Fallback ke context (topik terakhir) kalau skor tipis tapi ada nyambung dikit
   */
-  function findResponse(input) {
+  function findResponseWithMeta(input) {
     var normalizedFull = normalizeText(input);
     var userTokens = tokenize(input);
 
     if (userTokens.length === 0) {
       var fbEmpty = _knowledge.find(function (k) { return k.category === 'fallback'; });
-      return resolvePlaceholders(fbEmpty ? fbEmpty.response : 'Hmm, aku belum nangkep maksudnya nih 🌙');
+      return {
+        text: resolvePlaceholders(fbEmpty ? fbEmpty.response : 'Hmm, aku belum nangkep maksudnya nih 🌙'),
+        isFallback: true
+      };
     }
 
     var best = null;
     var bestScore = 0;
-    var bestIsWeak = false;
 
     for (var i = 0; i < _knowledge.length; i++) {
       var item = _knowledge[i];
@@ -201,19 +203,49 @@
 
     if (best && bestScore >= MIN_SCORE) {
       _lastCategory = best.category;
-      return resolvePlaceholders(best.response);
+      return { text: resolvePlaceholders(best.response), isFallback: false };
     }
 
     // Skor lemah tapi ada sedikit sinyal → coba nyambung ke topik obrolan sebelumnya
     if (best && bestScore > 0 && _lastCategory) {
       logFallback(input, best.category, bestScore);
       var contextItem = _knowledge.find(function (k) { return k.category === _lastCategory; });
-      if (contextItem) return resolvePlaceholders(contextItem.response);
+      if (contextItem) return { text: resolvePlaceholders(contextItem.response), isFallback: false };
     }
 
     logFallback(input, best ? best.category : null, bestScore);
     var fb = _knowledge.find(function (k) { return k.category === 'fallback'; });
-    return resolvePlaceholders(fb ? fb.response : 'Maaf, Evan belum memberitahu saya mengenai hal itu, jadi saya belum bisa menjawab.');
+    return {
+      text: resolvePlaceholders(fb ? fb.response : 'Maaf, Evan belum memberitahu saya mengenai hal itu, jadi saya belum bisa menjawab.'),
+      isFallback: true
+    };
+  }
+
+  function findResponse(input) {
+    return findResponseWithMeta(input).text;
+  }
+
+  /* ── AI fallback: dipanggil hanya kalau rule-based bener-bener gagal total.
+     Kalau gagal (network error, rate limit, dsb), diam-diam balik ke jawaban
+     fallback statis biasa — jangan sampai chatbot freeze/error ke user. */
+  var AI_FALLBACK_URL = 'https://ocedszxukzrnmvrecrnx.supabase.co/functions/v1/siesta-ai-fallback';
+
+  function tryAiFallback(question) {
+    return fetch(AI_FALLBACK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question: question })
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error('AI fallback failed');
+        return res.json();
+      })
+      .then(function (data) {
+        return data && data.answer ? data.answer : null;
+      })
+      .catch(function () {
+        return null; // diam-diam gagal, caller akan pakai fallback statis
+      });
   }
 
   function greetingResponse() {
@@ -302,6 +334,16 @@
     }, delay);
   }
 
+  /* ── Versi botReply yang menunggu AI fallback dulu sebelum menjawab.
+     Typing indicator tetap tampil selama nunggu, jadi UX-nya nggak keliatan macet. */
+  function botReplyAsync(container, textPromise, fallbackText) {
+    showTyping(container);
+    textPromise.then(function (aiAnswer) {
+      hideTyping(container);
+      addMessage(container, aiAnswer || fallbackText, 'bot');
+    });
+  }
+
   /* ── Quick replies ── */
   var QUICK_REPLIES = [
     { label: 'Siapa Evan?', text: 'siapa evan' },
@@ -328,8 +370,18 @@
   function handleUserInput(text, container) {
     if (!text.trim()) return;
     addMessage(container, text, 'user');
-    var reply = findResponse(text);
-    botReply(container, reply);
+
+    var result = findResponseWithMeta(text);
+
+    if (!result.isFallback) {
+      botReply(container, result.text);
+      return;
+    }
+
+    // Rule-based gagal total → coba AI fallback sebagai upaya terakhir.
+    // Kalau AI juga gagal/timeout, otomatis balik ke jawaban fallback statis.
+    var aiPromise = tryAiFallback(text);
+    botReplyAsync(container, aiPromise, result.text);
   }
 
   /* ── Init widget behavior ── */
