@@ -62,13 +62,13 @@
     root.innerHTML = [
       '<button class="siesta-bubble" id="siestaBubble" aria-label="Buka chat Siesta">',
       '  <span class="siesta-notif" id="siestaNotif"></span>',
-      '  <span class="siesta-chat-icon"><img src="/shared/icon/asisten.webp" alt="Siesta" /></span>',
+      '  <span class="siesta-chat-icon"><img src="/images/asisten.webp" alt="Siesta" /></span>',
       '  <svg class="siesta-close-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 6 6 18M6 6l12 12"/></svg>',
       '</button>',
 
       '<div class="siesta-window" id="siestaWindow" role="dialog" aria-label="Chat dengan Siesta">',
       '  <div class="siesta-header">',
-      '    <div class="siesta-avatar"><img src="/shared/icon/asisten.webp" alt="Siesta" /></div>',
+      '    <div class="siesta-avatar"><img src="/images/asisten.webp" alt="Siesta" /></div>',
       '    <div class="siesta-header-info">',
       '      <div class="siesta-name">SIESTA</div>',
       '      <div class="siesta-status">Asisten Evan</div>',
