@@ -14,6 +14,26 @@
   var _hasGreeted  = false;
   var _sessionMsgs = [];
 
+  /* ── Umur Evan dihitung otomatis dari tanggal lahir, bukan angka statis ──
+     27 Desember 2006. Pakai floor tahun: 20 tahun 11 bulan tetap dibilang 20,
+     baru naik ke 21 pas tanggal ulang tahunnya udah lewat di tahun berjalan. */
+  var BIRTH_DATE = new Date(2006, 11, 27); // bulan 0-indexed, jadi 11 = Desember
+
+  function calcAge() {
+    var now = new Date();
+    var age = now.getFullYear() - BIRTH_DATE.getFullYear();
+    var hasHadBirthdayThisYear =
+      now.getMonth() > BIRTH_DATE.getMonth() ||
+      (now.getMonth() === BIRTH_DATE.getMonth() && now.getDate() >= BIRTH_DATE.getDate());
+    if (!hasHadBirthdayThisYear) age -= 1;
+    return age;
+  }
+
+  /* ── Ganti placeholder dinamis di response sebelum ditampilkan ── */
+  function resolvePlaceholders(text) {
+    return text.replace(/\{\{AGE\}\}/g, calcAge());
+  }
+
   /* ── Fetch knowledge ── */
   function loadKnowledge() {
     return fetch(SB_URL + '/rest/v1/bot_knowledge?select=*&order=sort_order.asc', {
@@ -24,35 +44,181 @@
       .catch(function (err) { console.error('[Siesta] Gagal load knowledge:', err); _knowledge = []; });
   }
 
-  /* ── Matcher: cari knowledge yang keyword-nya match ── */
+  /* ── Kamus normalisasi: alias/typo umum → kata baku ──
+     Tambahin di sini kalau nemu variasi baru yang sering diketik user */
+  var SYNONYMS = {
+    'skil': 'skill', 'skiil': 'skill', 'kemampuannya': 'kemampuan',
+    'proyeknya': 'proyek', 'projeknya': 'proyek', 'projects': 'project',
+    'kolab': 'kolaborasi', 'collab': 'kolaborasi', 'kerjasama': 'kerja sama',
+    'ig': 'instagram', 'yt': 'youtube', 'gh': 'github', 'medsos': 'social media',
+    'sosmed': 'social media', 'fotonya': 'foto', 'galerinya': 'gallery',
+    'galeri': 'gallery', 'lagunya': 'lagu', 'musiknya': 'musik',
+    'evn': 'evan', 'evann': 'evan', 'org': 'orang', 'gmn': 'gimana',
+    'knp': 'kenapa', 'dmn': 'dimana', 'yg': 'yang', 'gk': 'gak', 'ga': 'gak',
+    'tdk': 'tidak', 'jd': 'jadi', 'utk': 'untuk', 'trmksh': 'terima kasih',
+    'mksh': 'terima kasih', 'thx': 'terima kasih', 'siapasih': 'siapa sih'
+  };
+
+  var STOPWORDS = ['yang','apa','itu','ini','di','ke','dari','dan','atau',
+    'sih','dong','deh','ya','yah','kah','nya','saya','aku','kamu','lo','gue',
+    'the','a','an','is','are','of','to'];
+
+  /* ── Normalisasi teks: lowercase, hapus tanda baca, terapkan sinonim ── */
+  function normalizeText(str) {
+    var cleaned = str
+      .toLowerCase()
+      .replace(/[^\w\sà-ÿ]/gi, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    var words = cleaned.split(' ').map(function (w) {
+      return SYNONYMS[w] || w;
+    });
+
+    return words.join(' ');
+  }
+
+  function tokenize(str) {
+    return normalizeText(str).split(' ').filter(function (w) {
+      return w.length > 0 && STOPWORDS.indexOf(w) === -1;
+    });
+  }
+
+  /* ── Levenshtein distance ringan, buat toleransi typo ── */
+  function levenshtein(a, b) {
+    if (a === b) return 0;
+    var al = a.length, bl = b.length;
+    if (al === 0) return bl;
+    if (bl === 0) return al;
+    var prev = new Array(bl + 1);
+    for (var j = 0; j <= bl; j++) prev[j] = j;
+    for (var i = 1; i <= al; i++) {
+      var cur = [i];
+      for (var k = 1; k <= bl; k++) {
+        var cost = a[i - 1] === b[k - 1] ? 0 : 1;
+        cur[k] = Math.min(
+          prev[k] + 1,      // hapus
+          cur[k - 1] + 1,   // sisip
+          prev[k - 1] + cost // substitusi
+        );
+      }
+      prev = cur;
+    }
+    return prev[bl];
+  }
+
+  /* Cek apakah token user cocok dengan token keyword, exact atau typo-tolerant */
+  function tokenMatches(userToken, kwToken) {
+    if (userToken === kwToken) return 1;
+    if (kwToken.length >= 4 && userToken.length >= 4) {
+      var maxDist = kwToken.length <= 5 ? 1 : 2;
+      if (levenshtein(userToken, kwToken) <= maxDist) return 0.75;
+    }
+    // substring untuk frasa multi-kata yang mengandung spasi (keyword tetap dicek utuh terpisah)
+    return 0;
+  }
+
+  /* ── Log pertanyaan yang gagal / lemah match (buat riset knowledge gap) ──
+     Fire-and-forget: tidak menunggu response, tidak mengganggu UI kalau gagal kirim */
+  function logFallback(question, matchedCategory, score) {
+    try {
+      fetch(SB_URL + '/rest/v1/bot_fallback_logs', {
+        method: 'POST',
+        headers: {
+          apikey: SB_ANON,
+          Authorization: 'Bearer ' + SB_ANON,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal'
+        },
+        body: JSON.stringify({
+          question: question,
+          matched_category: matchedCategory,
+          match_score: score
+        })
+      }).catch(function () { /* diam-diam gagal, gak masalah */ });
+    } catch (e) { /* diam-diam gagal, gak masalah */ }
+  }
+
+  var _lastCategory = null;
+
+  /* ── Matcher utama ──
+     - Tokenisasi + normalisasi input & keyword
+     - Skor akumulatif per item (bukan cuma keyword terpanjang)
+     - Bonus untuk match frasa penuh (multi-kata keyword ketemu berurutan)
+     - Toleransi typo ringan via Levenshtein
+     - Fallback ke context (topik terakhir) kalau skor tipis tapi ada nyambung dikit
+  */
   function findResponse(input) {
-    var text = input.toLowerCase().trim();
+    var normalizedFull = normalizeText(input);
+    var userTokens = tokenize(input);
+
+    if (userTokens.length === 0) {
+      var fbEmpty = _knowledge.find(function (k) { return k.category === 'fallback'; });
+      return resolvePlaceholders(fbEmpty ? fbEmpty.response : 'Hmm, aku belum nangkep maksudnya nih 🌙');
+    }
+
     var best = null;
     var bestScore = 0;
+    var bestIsWeak = false;
 
     for (var i = 0; i < _knowledge.length; i++) {
       var item = _knowledge[i];
       if (item.category === 'fallback') continue;
       var kws = item.keywords || [];
+      var itemScore = 0;
+
       for (var j = 0; j < kws.length; j++) {
-        var kw = kws[j].toLowerCase();
-        if (!kw) continue;
-        if (text.indexOf(kw) !== -1) {
-          var score = kw.length; // keyword lebih panjang & spesifik menang
-          if (score > bestScore) { bestScore = score; best = item; }
+        var kwRaw = (kws[j] || '').toLowerCase().trim();
+        if (!kwRaw) continue;
+
+        // Frasa penuh (mengandung spasi): cek muncul utuh di teks yang sudah dinormalisasi
+        if (kwRaw.indexOf(' ') !== -1) {
+          if (normalizedFull.indexOf(kwRaw) !== -1) {
+            itemScore += kwRaw.length * 1.5; // bonus frasa spesifik
+          }
+          continue;
         }
+
+        // Keyword satu kata: cocokkan ke tiap token user (exact / typo-tolerant)
+        var kwToken = SYNONYMS[kwRaw] || kwRaw;
+        for (var t = 0; t < userTokens.length; t++) {
+          var m = tokenMatches(userTokens[t], kwToken);
+          if (m > 0) {
+            itemScore += kwRaw.length * m;
+            break; // satu keyword cukup dihitung sekali per item
+          }
+        }
+      }
+
+      if (itemScore > bestScore) {
+        bestScore = itemScore;
+        best = item;
       }
     }
 
-    if (best) return best.response;
+    // Threshold: skor terlalu tipis (kemungkinan typo-fluke) dianggap gak match
+    var MIN_SCORE = 3;
 
+    if (best && bestScore >= MIN_SCORE) {
+      _lastCategory = best.category;
+      return resolvePlaceholders(best.response);
+    }
+
+    // Skor lemah tapi ada sedikit sinyal → coba nyambung ke topik obrolan sebelumnya
+    if (best && bestScore > 0 && _lastCategory) {
+      logFallback(input, best.category, bestScore);
+      var contextItem = _knowledge.find(function (k) { return k.category === _lastCategory; });
+      if (contextItem) return resolvePlaceholders(contextItem.response);
+    }
+
+    logFallback(input, best ? best.category : null, bestScore);
     var fb = _knowledge.find(function (k) { return k.category === 'fallback'; });
-    return fb ? fb.response : 'Maaf, Evan belum memberitahu saya mengenai hal itu, jadi saya belum bisa menjawab.';
+    return resolvePlaceholders(fb ? fb.response : 'Maaf, Evan belum memberitahu saya mengenai hal itu, jadi saya belum bisa menjawab.');
   }
 
   function greetingResponse() {
     var g = _knowledge.find(function (k) { return k.category === 'greeting'; });
-    return g ? g.response : 'Halo... Aku Siesta 🌙 Kalau penasaran tentang Evan, tinggal tanya aku aja yah.';
+    return resolvePlaceholders(g ? g.response : 'Halo... Aku Siesta 🌙 Kalau penasaran tentang Evan, tinggal tanya aku aja yah.');
   }
 
   /* ── Build DOM ── */
