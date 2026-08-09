@@ -3,18 +3,23 @@
    Semua class prefixed .siesta- untuk avoid conflicts
 ══════════════════════════════════════════════════════ */
 
-/* ── Variables ── */
+/* ── Variables ──
+   Siesta adalah produk MEA Ecosystem — warna mengikuti token resmi
+   shared/token/token-color.css. Wajib load token-color.css sebelum
+   file ini. Variable --si-* dipertahankan (dipakai di seluruh file)
+   supaya tidak perlu rename massal, cukup nilainya diarahkan ke
+   token --mea-*. */
 .siesta-root {
-  --si-navy:       #050d1a;
-  --si-surface:    #0a1628;
-  --si-card:       rgba(10, 22, 40, 0.92);
-  --si-accent:     #4fc3f7;
-  --si-accent-dim: #1e88e5;
-  --si-glow:       rgba(79, 195, 247, 0.15);
-  --si-white:      #e8f0fe;
-  --si-dim:        #7b9bbf;
-  --si-border:     rgba(79, 195, 247, 0.12);
-  --si-border-h:   rgba(79, 195, 247, 0.28);
+  --si-navy:       var(--mea-bg, #0A0A0A);
+  --si-surface:    var(--mea-surface, #161616);
+  --si-card:       rgba(22, 22, 22, 0.92);
+  --si-accent:     var(--mea-accent, #3B82F6);
+  --si-accent-dim: var(--mea-accent-hover, #2563EB);
+  --si-glow:       rgba(59, 130, 246, 0.15);
+  --si-white:      var(--mea-text-primary, #FAFAFA);
+  --si-dim:        var(--mea-text-secondary, #A1A1A1);
+  --si-border:     rgba(59, 130, 246, 0.12);
+  --si-border-h:   rgba(59, 130, 246, 0.28);
   --si-r:          12px;
   --si-t:          0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   font-family: 'Cormorant Garamond', Georgia, serif;
@@ -29,9 +34,9 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0f1f3d, #162447);
+  background: linear-gradient(135deg, #161616, #1E1E1E);
   border: 1px solid var(--si-border-h);
-  box-shadow: 0 4px 24px rgba(79, 195, 247, 0.2), 0 0 0 0 rgba(79, 195, 247, 0.3);
+  box-shadow: 0 4px 24px rgba(59, 130, 246, 0.2), 0 0 0 0 rgba(59, 130, 246, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -41,7 +46,7 @@
 }
 .siesta-bubble:hover {
   transform: scale(1.08);
-  box-shadow: 0 6px 32px rgba(79, 195, 247, 0.3), 0 0 0 6px rgba(79, 195, 247, 0.08);
+  box-shadow: 0 6px 32px rgba(59, 130, 246, 0.3), 0 0 0 6px rgba(59, 130, 246, 0.08);
   animation: none;
 }
 .siesta-bubble .siesta-close-icon { color: var(--si-accent); flex-shrink: 0; display: none; }
@@ -64,8 +69,8 @@
 .siesta-bubble.open { animation: none; }
 
 @keyframes siesta-pulse {
-  0%, 100% { box-shadow: 0 4px 24px rgba(79,195,247,0.2), 0 0 0 0 rgba(79,195,247,0.25); }
-  50%       { box-shadow: 0 4px 24px rgba(79,195,247,0.2), 0 0 0 8px rgba(79,195,247,0); }
+  0%, 100% { box-shadow: 0 4px 24px rgba(59,130,246,0.2), 0 0 0 0 rgba(59,130,246,0.25); }
+  50%       { box-shadow: 0 4px 24px rgba(59,130,246,0.2), 0 0 0 8px rgba(59,130,246,0); }
 }
 
 /* Notif dot */
@@ -98,7 +103,7 @@
   border-radius: var(--si-r);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(79,195,247,0.05);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(59,130,246,0.05);
   transform: translateY(16px) scale(0.96);
   opacity: 0;
   pointer-events: none;
@@ -118,7 +123,7 @@
   gap: 0.75rem;
   padding: 0.9rem 1.1rem;
   border-bottom: 1px solid var(--si-border);
-  background: rgba(10, 22, 40, 0.6);
+  background: rgba(22, 22, 22, 0.6);
   flex-shrink: 0;
 }
 .siesta-avatar {
@@ -175,10 +180,10 @@
   gap: 0.6rem;
   scroll-behavior: smooth;
   scrollbar-width: thin;
-  scrollbar-color: rgba(79,195,247,0.2) transparent;
+  scrollbar-color: rgba(59,130,246,0.2) transparent;
 }
 .siesta-messages::-webkit-scrollbar { width: 3px; }
-.siesta-messages::-webkit-scrollbar-thumb { background: rgba(79,195,247,0.2); border-radius: 2px; }
+.siesta-messages::-webkit-scrollbar-thumb { background: rgba(59,130,246,0.2); border-radius: 2px; }
 
 /* Bubble messages */
 .siesta-msg {
@@ -202,13 +207,13 @@
   color: var(--si-white);
 }
 .siesta-msg.bot .siesta-msg-bubble {
-  background: rgba(15, 31, 61, 0.8);
+  background: rgba(30, 30, 30, 0.8);
   border: 1px solid var(--si-border);
   border-bottom-left-radius: 4px;
 }
 .siesta-msg.user .siesta-msg-bubble {
-  background: linear-gradient(135deg, rgba(30,136,229,0.4), rgba(79,195,247,0.25));
-  border: 1px solid rgba(79,195,247,0.2);
+  background: linear-gradient(135deg, rgba(37,99,235,0.4), rgba(59,130,246,0.25));
+  border: 1px solid rgba(59,130,246,0.2);
   border-bottom-right-radius: 4px;
   color: var(--si-white);
 }
@@ -251,7 +256,7 @@
 }
 .siesta-quick {
   padding: 0.3rem 0.75rem;
-  background: rgba(15,31,61,0.7);
+  background: rgba(30,30,30,0.7);
   border: 1px solid var(--si-border);
   border-radius: 20px;
   color: var(--si-dim);
@@ -265,7 +270,7 @@
 .siesta-quick:hover {
   border-color: var(--si-accent);
   color: var(--si-accent);
-  background: rgba(79,195,247,0.08);
+  background: rgba(59,130,246,0.08);
 }
 
 /* ── Input ── */
@@ -275,12 +280,12 @@
   gap: 0.5rem;
   padding: 0.75rem;
   border-top: 1px solid var(--si-border);
-  background: rgba(5,13,26,0.6);
+  background: rgba(10,10,10,0.6);
   flex-shrink: 0;
 }
 .siesta-input {
   flex: 1;
-  background: rgba(15,31,61,0.6);
+  background: rgba(30,30,30,0.6);
   border: 1px solid var(--si-border);
   border-radius: 20px;
   padding: 0.5rem 0.9rem;
@@ -309,7 +314,7 @@
 }
 .siesta-send:hover {
   transform: scale(1.08);
-  box-shadow: 0 0 16px rgba(79,195,247,0.35);
+  box-shadow: 0 0 16px rgba(59,130,246,0.35);
 }
 .siesta-send:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
