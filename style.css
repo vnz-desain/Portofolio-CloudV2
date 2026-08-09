@@ -352,26 +352,25 @@ a { color: inherit; text-decoration: none; }
 
 /* PERF: Hero BG is position:absolute (not fixed) to avoid triggering a new
    stacking context on every scroll. Parallax is removed from JS — static
-   background is 60 fps vs the janky JS-driven version on low-end devices. */
+   background is 60 fps vs the janky JS-driven version on low-end devices.
+   Full CSS — tidak pakai file gambar sama sekali. */
 .hero-bg {
   position: absolute;
   inset: 0;
   z-index: 0;
-  /* Fallback gradient when no image exists */
   background:
-    radial-gradient(ellipse 70% 55% at 60% 35%, rgba(232,228,216,0.08) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 50% at 65% 20%, rgba(232,228,216,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 40% at 15% 75%, rgba(232,228,216,0.05) 0%, transparent 65%),
     linear-gradient(160deg, #0A0A0A 0%, #0A0A0A 45%, #141414 100%);
 }
-
-/* PERF: Hero image uses object-fit:cover — no JS resize needed */
-.hero-bg-img {
+/* Garis diagonal tipis — tekstur halus ala Resend, murni CSS */
+.hero-bg::before {
+  content: '';
   position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: center;
-  opacity: 0.35;
-  /* PERF: will-change:opacity for the fade-in; removed after load via JS */
+  right: -5%; bottom: 18%;
+  width: 45%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232,228,216,0.10), transparent);
+  transform: rotate(-3deg);
 }
 
 /* Gradient overlay — pure CSS, single repaint */
@@ -640,62 +639,35 @@ a { color: inherit; text-decoration: none; }
 .about-tags span:hover { border-color: var(--red); color: var(--white); }
 
 /* ===== SECTION LIGHT VARIANT =====
-   Jeda visual: satu section terang di antara section gelap, supaya
-   halaman punya ritme dan tidak monoton — tetap monokrom (hitam/putih),
-   cuma dibalik. Dipakai selektif (bukan di semua section) supaya tidak
-   terasa berlebihan. Glow lembut ditambahkan di kedua arah transisi
-   (cahaya putih redup di section gelap, cahaya hitam redup di section
-   terang) supaya perpindahan warna tidak terasa "loncat" mendadak. */
-.section-light {
-  background: #EDEAE2;
+/* ===== PROJECTS =====
+   Background full CSS (bukan gambar) — radial glow redup di dua sudut
+   plus garis diagonal tipis, mengikuti pola visual ala Resend: dark
+   nyaris polos, ada tekstur halus tapi tidak mencolok. Ringan karena
+   cuma gradient, bukan image atau blur mahal. */
+.projects {
+  background: var(--black);
   position: relative;
+  overflow: hidden;
+  contain: layout;
 }
-.section-light::before {
+.projects::before {
   content: '';
   position: absolute;
-  left: -10%; top: -10%;
+  left: -10%; top: -15%;
   width: 600px; height: 600px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(10,10,10,0.05) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(232,228,216,0.045) 0%, transparent 65%);
   pointer-events: none;
 }
-.section-light::after {
+.projects::after {
   content: '';
   position: absolute;
-  right: -10%; bottom: -10%;
-  width: 500px; height: 500px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(10,10,10,0.04) 0%, transparent 65%);
+  right: -8%; bottom: 10%;
+  width: 30%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232,228,216,0.08), transparent);
+  transform: rotate(-4deg);
   pointer-events: none;
 }
-.section-light .section-label,
-.section-light .section-title { color: #0A0A0A; }
-.section-light .section-title em { -webkit-text-stroke: 1px rgba(10,10,10,0.35); }
-
-/* Card tetap gelap meski section-nya terang — supaya card menonjol
-   dari background, bukan putih-di-atas-putih yang datar. Ini juga jadi
-   glass: background semi-transparan gelap + blur menangkap sedikit
-   warna terang di belakangnya. */
-.section-light .card-title { color: var(--white); }
-.section-light .card-desc { color: var(--white-dim); }
-.section-light .card-num,
-.section-light .card-tags span { color: var(--red-bright); }
-.section-light .project-card {
-  background: rgba(10, 10, 10, 0.82);
-  backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
-  border-color: rgba(255,255,255,0.10);
-}
-.section-light .project-card:hover { border-color: rgba(232,228,216,0.3); }
-.section-light .card-img-wrap { background: #141414; }
-.section-light .card-tags span {
-  background: rgba(232,228,216,0.08);
-  border-color: rgba(232,228,216,0.18);
-}
-.section-light .card-img-fallback { color: var(--red); }
-
-/* ===== PROJECTS ===== */
-.projects { background: #EDEAE2; }
 
 .projects-grid {
   display: grid;

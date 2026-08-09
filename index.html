@@ -189,22 +189,11 @@
   <!-- ===================== HERO SECTION ===================== -->
   <section class="hero" id="hero">
     <!--
-      BACKGROUND IMAGE:
-      Replace src with your hero image. Use a compressed JPG ≤ 300 KB.
-      PERF: fetchpriority="high" tells the browser to load this before other images.
-      decoding="async" keeps the main thread free during decode.
-      File: /images/hero-bg.jpg — recommended 1200×675 px (not full 1920 — browsers scale it)
+      Background full CSS (radial + linear gradient di .hero-bg, lihat
+      style.css) — tidak pakai file gambar sama sekali, supaya ringan
+      dan tidak bergantung pada asset yang mungkin belum di-upload.
     -->
-    <div class="hero-bg" aria-hidden="true">
-      <img
-        src="/images/hero-bg.webp"
-        alt=""
-        class="hero-bg-img"
-        fetchpriority="high"
-        decoding="async"
-        onerror="this.style.display='none'"
-      />
-    </div>
+    <div class="hero-bg" aria-hidden="true"></div>
 
     <!--
       PERF: Grain is a pure CSS SVG data-URI now rendered on its own layer via
@@ -285,7 +274,7 @@
   </section>
 
   <!-- ===================== PROJECTS SECTION ===================== -->
-  <section class="projects section-pad section-light" id="projects">
+  <section class="projects section-pad" id="projects">
     <div class="container">
       <div class="section-header reveal-up">
         <p class="section-label">— Featured Work</p>
