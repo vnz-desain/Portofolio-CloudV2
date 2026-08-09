@@ -639,8 +639,35 @@ a { color: inherit; text-decoration: none; }
 }
 .about-tags span:hover { border-color: var(--red); color: var(--white); }
 
+/* ===== SECTION LIGHT VARIANT =====
+   Jeda visual: satu section terang di antara section gelap, supaya
+   halaman punya ritme dan tidak monoton — tetap monokrom (hitam/putih),
+   cuma dibalik. Dipakai selektif (bukan di semua section) supaya tidak
+   terasa berlebihan. */
+.section-light {
+  background: #EDEAE2;
+}
+.section-light .section-label,
+.section-light .section-title { color: #0A0A0A; }
+.section-light .section-title em { -webkit-text-stroke: 1px rgba(10,10,10,0.35); }
+.section-light .card-title { color: #0A0A0A; }
+.section-light .card-desc { color: #5A5A5A; }
+.section-light .card-num,
+.section-light .card-tags span { color: #4A4A44; }
+.section-light .project-card {
+  background: #FFFFFF;
+  border-color: rgba(10,10,10,0.10);
+}
+.section-light .project-card:hover { border-color: rgba(10,10,10,0.25); }
+.section-light .card-img-wrap { background: #E0DDD3; }
+.section-light .card-tags span {
+  background: rgba(10,10,10,0.05);
+  border-color: rgba(10,10,10,0.14);
+}
+.section-light .card-img-fallback { color: rgba(10,10,10,0.18); }
+
 /* ===== PROJECTS ===== */
-.projects { background: var(--black); }
+.projects { background: #EDEAE2; }
 
 .projects-grid {
   display: grid;
