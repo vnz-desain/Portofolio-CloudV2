@@ -11,9 +11,10 @@
    2. skill-item glassmorphism REMOVED — backdrop-filter was on every card;
       replaced with a solid semi-transparent background (same look, ~10× cheaper).
 
-   3. Film grain animation: still CSS steps() but reduced from 10 keyframes to
-      6, and the element is promoted to its own layer via will-change:transform
-      so it never triggers a repaint on the document.
+   3. Film grain animation REMOVED — was causing a flicker/kedip effect at
+      the screen edges on all browsers, even at 0.18s steps with GPU
+      compositing. Removed entirely rather than just disabling the
+      animation, per explicit request.
 
    4. Parallax on hero image REMOVED from JS (was triggering layout on scroll).
       Hero image is now position:fixed behind a regular stacking context — the
@@ -132,33 +133,6 @@ a { color: inherit; text-decoration: none; }
   padding: 0 2.5rem;
 }
 .section-pad { padding: 8rem 0; }
-
-/* ===== GRAIN =====
-   PERF: will-change:transform promotes this to its own compositor layer.
-   The animation runs entirely on the GPU — zero CPU/layout cost per frame.
-   Reduced from 10 keyframe steps to 6 (imperceptible quality loss).
-*/
-.grain {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.025;
-  will-change: transform;
-  /* Inline SVG noise — no network request */
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 200px 200px;
-  /* TEMP DEBUG: animation dimatikan untuk tes apakah ini penyebab kedip di pinggiran layar */
-  /* animation: grain 0.18s steps(1) infinite; */
-}
-@keyframes grain {
-  0%  { transform: translate(0, 0); }
-  20% { transform: translate(-3%, 2%); }
-  40% { transform: translate(2%, -3%); }
-  60% { transform: translate(3%, 1%); }
-  80% { transform: translate(-1%, 3%); }
-  100%{ transform: translate(1%, -1%); }
-}
 
 /* ===== NAVIGATION =====
    PERF: backdrop-filter REMOVED. Was causing full-page repaint on every
@@ -1096,7 +1070,6 @@ a { color: inherit; text-decoration: none; }
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  .grain { animation: none; }
   .reveal-up, .reveal-left, .reveal-right {
     opacity: 1;
     transform: none;
