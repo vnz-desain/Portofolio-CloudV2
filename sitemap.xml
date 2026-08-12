@@ -4,35 +4,28 @@
   <!-- 1. DOMAIN UTAMA PERSONAL -->
   <url>
     <loc>https://evanalmunawar.my.id/</loc>
-    <lastmod>2026-06-23</lastmod>
+    <lastmod>2026-08-12</lastmod>
     <priority>1.0</priority>
   </url>
 
   <!-- 2. SUBDOMAIN TOOLS -->
   <url>
     <loc>https://tools.evanalmunawar.my.id/</loc>
-    <lastmod>2026-06-23</lastmod>
+    <lastmod>2026-08-12</lastmod>
     <priority>0.8</priority>
   </url>
 
-  <!-- 3. SUBDOMAIN ASSISTANT -->
-  <url>
-    <loc>https://assistant.evanalmunawar.my.id/</loc>
-    <lastmod>2026-06-23</lastmod>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- 4. SUBDOMAIN PLAYLIST -->
+  <!-- 3. SUBDOMAIN PLAYLIST -->
   <url>
     <loc>https://playlist.evanalmunawar.my.id/</loc>
-    <lastmod>2026-06-23</lastmod>
+    <lastmod>2026-08-12</lastmod>
     <priority>0.8</priority>
   </url>
 
-  <!-- 5. SUBDOMAIN GALLERY -->
+  <!-- 4. SUBDOMAIN GALLERY -->
   <url>
     <loc>https://gallery.evanalmunawar.my.id/</loc>
-    <lastmod>2026-06-23</lastmod>
+    <lastmod>2026-08-12</lastmod>
     <priority>0.8</priority>
   </url>
 
