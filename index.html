@@ -35,6 +35,8 @@
         "knowsAbout": [
           "Video Editing",
           "Cinematography",
+          "Photography",
+          "Short Film Directing",
           "CapCut",
           "Canva",
           "CorelDRAW",
@@ -46,19 +48,25 @@
         "sameAs": [
           "https://instagram.com/ef.vnz",
           "https://tiktok.com/@vanta.es",
-          "https://threads.com/@ef.vnz"
+          "https://www.threads.com/@ef.vnz",
+          "https://x.com/evanalmunawar",
+          "https://www.linkedin.com/in/evanalmunawar/",
+          "https://bsky.app/profile/evanalmunawar.my.id",
+          "https://mastodon.social/@evanalmunawar",
+          "https://mealink.my.id/evanalmunawar",
+          "https://linktr.ee/evanalmunawar"
         ],
         "email": "mailto:evanalmunawar.work@email.com",
         "founder": {
-          "@id": "https://evanalmunawar.my.id/#mea-ecosystem"
+          "@id": "https://meaecosystem.biz.id/#mea-ecosystem"
         }
       },
       {
         "@type": "Organization",
-        "@id": "https://evanalmunawar.my.id/#mea-ecosystem",
+        "@id": "https://meaecosystem.biz.id/#mea-ecosystem",
         "name": "MEA Ecosystem",
         "description": "A digital platform ecosystem built and founded by M. Evan Almunawar, integrating tools, assistant, playlist, and gallery services under one identity.",
-        "url": "https://evanalmunawar.my.id",
+        "url": "https://meaecosystem.biz.id",
         "founder": {
           "@id": "https://evanalmunawar.my.id/#person"
         },
@@ -83,12 +91,63 @@
         "description": "Portfolio of M. Evan Almunawar — Multimedia Creator and Founder of MEA Ecosystem.",
         "author": { "@id": "https://evanalmunawar.my.id/#person" },
         "inLanguage": "en"
+      },
+      {
+        "@type": "VideoObject",
+        "@id": "https://evanalmunawar.my.id/#project-garis-sketsa",
+        "name": "GARIS SKETSA",
+        "description": "A short movie about school life that tells the story of interactions, friendships, and the emotional journey of teenagers within a school environment.",
+        "url": "https://youtu.be/avhV3ijq3Wo",
+        "thumbnailUrl": "https://ocedszxukzrnmvrecrnx.supabase.co/storage/v1/object/public/portfolio-assets/projects/1001262991-1782627368684.webp",
+        "uploadDate": "2026-06-26",
+        "creator": { "@id": "https://evanalmunawar.my.id/#person" },
+        "genre": "Short Film"
+      },
+      {
+        "@type": "VideoObject",
+        "@id": "https://evanalmunawar.my.id/#project-sunan-gunung-jati",
+        "name": "SUNAN GUNUNG JATI: Tari Topeng Senjata Dakwah Islam",
+        "description": "Tells the story of Sunan Gunung Jati's journey in spreading Islamic teachings through traditional Topeng dance performances with strong cultural elements.",
+        "url": "https://youtu.be/557VqLx9V00",
+        "thumbnailUrl": "https://ocedszxukzrnmvrecrnx.supabase.co/storage/v1/object/public/portfolio-assets/projects/1001262990-1782627386371.webp",
+        "uploadDate": "2026-06-26",
+        "creator": { "@id": "https://evanalmunawar.my.id/#person" },
+        "genre": "Cultural Documentation"
+      },
+      {
+        "@type": "VideoObject",
+        "@id": "https://evanalmunawar.my.id/#project-tarian-kolosal",
+        "name": "Tarian Kolosal P5RA — Bhineka Tunggal Ika",
+        "description": "Tarian Kolosal P5RA bertema Bhineka Tunggal Ika, Fase F TP. 2024/2025, Kelas 11.2 — dokumentasi dan produksi video penuh.",
+        "url": "https://youtu.be/557VqLx9V00",
+        "thumbnailUrl": "https://ocedszxukzrnmvrecrnx.supabase.co/storage/v1/object/public/portfolio-assets/projects/1001262992-1782627396852.webp",
+        "uploadDate": "2026-06-26",
+        "creator": { "@id": "https://evanalmunawar.my.id/#person" },
+        "genre": "Cultural Documentation"
       }
     ]
   }
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>M. Evan Almunawar — Portfolio</title>
+
+  <meta name="description" content="M. Evan Almunawar (MEA) — Multimedia creator specializing in video editing, cinematography, and digital storytelling. Founder of the MEA Ecosystem, a personal digital platform integrating tools, assistant, playlist, and gallery services." />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://evanalmunawar.my.id" />
+  <meta property="og:title" content="M. Evan Almunawar — Portfolio" />
+  <meta property="og:description" content="Multimedia creator experienced in video editing, cinematography, content management, and digital media storytelling. Founder of the MEA Ecosystem." />
+  <meta property="og:image" content="https://evanalmunawar.my.id/images/og-image.webp" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="M. Evan Almunawar — Portfolio" />
+  <meta name="twitter:description" content="Multimedia creator experienced in video editing, cinematography, content management, and digital media storytelling." />
+  <meta name="twitter:image" content="https://evanalmunawar.my.id/images/og-image.webp" />
 
   <!--
     PERF: preconnect to Google Fonts CDN to reduce DNS + TLS handshake latency.
@@ -108,7 +167,7 @@
   -->
   <link rel="stylesheet" href="style.css" />
   <!-- Siesta adalah produk MEA Ecosystem — pakai token resmi -->
-  <link rel="stylesheet" href="https://meaecosystem.my.id/shared/token/token-color.css" />
+  <link rel="stylesheet" href="https://meaecosystem.biz.id/shared/token/token-color.css" />
   <link rel="stylesheet" href="siesta.css" />
   <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
 </head>
@@ -250,8 +309,8 @@
           <h2 class="section-title">Seeing The World<br /><em>Through The Lens</em></h2>
 
           <!-- Bio dan tags diisi dari data.json via JS, style dikunci di CSS -->
-          <p class="about-body" id="aboutBio"></p>
-          <div class="about-tags" id="aboutTags2"></div>
+          <p class="about-body" id="aboutBio">I have a strong interest in digital media, technology, and creative visual storytelling. Experienced in administration, data management, and digital media — with a clean, detail-oriented approach. Currently building the MEA Ecosystem, a personal digital platform integrating tools, assistant, playlist, and gallery services under one identity.</p>
+          <div class="about-tags" id="aboutTags2"><span>Administration</span><span>Social Media Management</span><span>Media Editing</span><span>Technology &amp; Computer</span></div>
 
           <!-- ── TABS ── -->
           <div class="about-tabs" id="aboutTabs" role="tablist" aria-label="Background tabs">
@@ -275,7 +334,54 @@
       </div>
 
       <div class="projects-grid" id="projectsGrid">
-        <!-- Rendered by JS from Apps Script -->
+        <article class="project-card">
+          <div class="card-img-wrap">
+            <img src="https://ocedszxukzrnmvrecrnx.supabase.co/storage/v1/object/public/portfolio-assets/projects/1001262991-1782627368684.webp" alt="GARIS SKETSA [Original Short Movie by MKV Production]" class="card-img" loading="lazy" decoding="async" onerror="this.style.display='none'" />
+            <div class="card-img-fallback" aria-hidden="true">FILM</div>
+          </div>
+          <div class="card-body">
+            <span class="card-num">01</span>
+            <h3 class="card-title"><a href="https://youtu.be/avhV3ijq3Wo" target="_blank" rel="noopener">GARIS SKETSA [Original Short Movie by MKV Production]</a></h3>
+            <p class="card-desc">A short movie about school life that tells the story of interactions, friendships, and the emotional journey of teenagers within a school environment.</p>
+            <div class="card-tags"><span>Director</span><span>Cinematographer</span><span>Camera Operator</span><span>Editor</span><span>Sound Design</span></div>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="card-img-wrap">
+            <img src="https://ocedszxukzrnmvrecrnx.supabase.co/storage/v1/object/public/portfolio-assets/projects/1001262990-1782627386371.webp" alt="SUNAN GUNUNG JATI: Tari Topeng Senjata Dakwah Islam" class="card-img" loading="lazy" decoding="async" onerror="this.style.display='none'" />
+            <div class="card-img-fallback" aria-hidden="true">EVENT</div>
+          </div>
+          <div class="card-body">
+            <span class="card-num">02</span>
+            <h3 class="card-title"><a href="https://youtu.be/557VqLx9V00" target="_blank" rel="noopener">SUNAN GUNUNG JATI: Tari Topeng Senjata Dakwah Islam</a></h3>
+            <p class="card-desc">Tells the story of Sunan Gunung Jati's journey in spreading Islamic teachings through traditional Topeng dance performances with strong cultural elements.</p>
+            <div class="card-tags"><span>Videography</span><span>Editor</span><span>Camera Operator</span></div>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="card-img-wrap">
+            <img src="https://ocedszxukzrnmvrecrnx.supabase.co/storage/v1/object/public/portfolio-assets/projects/1001262992-1782627396852.webp" alt="Tarian Kolosal P5RA — Bhineka Tunggal Ika" class="card-img" loading="lazy" decoding="async" onerror="this.style.display='none'" />
+            <div class="card-img-fallback" aria-hidden="true">TARI</div>
+          </div>
+          <div class="card-body">
+            <span class="card-num">03</span>
+            <h3 class="card-title"><a href="https://youtu.be/557VqLx9V00" target="_blank" rel="noopener">Tarian Kolosal P5RA — Bhineka Tunggal Ika</a></h3>
+            <p class="card-desc">Tarian Kolosal P5RA bertema Bhineka Tunggal Ika, Fase F TP. 2024/2025, Kelas 11.2 — dokumentasi dan produksi video penuh.</p>
+            <div class="card-tags"><span>Videography</span><span>Editor</span><span>Camera Operator</span></div>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="card-img-wrap">
+            <img src="https://ocedszxukzrnmvrecrnx.supabase.co/storage/v1/object/public/portfolio-assets/projects/Screenshot-from-2026-08-09-13-30-46-1786257112161.webp" alt="MEA ECOSYSTEM" class="card-img" loading="lazy" decoding="async" onerror="this.style.display='none'" />
+            <div class="card-img-fallback" aria-hidden="true">PROJECT</div>
+          </div>
+          <div class="card-body">
+            <span class="card-num">04</span>
+            <h3 class="card-title"><a href="https://meaecosystem.my.id" target="_blank" rel="noopener">MEA ECOSYSTEM</a></h3>
+            <p class="card-desc">Platform digital</p>
+            <div class="card-tags"><span>Founder</span><span>Developer</span></div>
+          </div>
+        </article>
       </div>
     </div>
   </section>
@@ -288,7 +394,46 @@
         <h2 class="section-title">Skills &amp;<br /><em>Expertise</em></h2>
       </div>
       <div class="skills-grid" id="skillsGrid">
-        <!-- Rendered by JS from Apps Script -->
+        <div class="skill-item">
+          <div class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></div>
+          <h3 class="skill-name">Editing Video</h3>
+          <p class="skill-desc">Precise cuts, pacing, and narrative rhythm for compelling visual stories using CapCut and other tools.</p>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+          <h3 class="skill-name">CapCut</h3>
+          <p class="skill-desc">Fast mobile and desktop video editing for social-first content, reels, and short films.</p>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <h3 class="skill-name">Canva</h3>
+          <p class="skill-desc">Polished graphic design, presentations, and brand visual assets for events and social media.</p>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg></div>
+          <h3 class="skill-name">CorelDRAW</h3>
+          <p class="skill-desc">Vector illustration, logo design, stamps, and professional print layouts.</p>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+          <h3 class="skill-name">Microsoft Office</h3>
+          <p class="skill-desc">Documentation, data entry, reporting, and presentations using Word, Excel, and PowerPoint.</p>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+          <h3 class="skill-name">Pengoperasian Kamera</h3>
+          <p class="skill-desc">Basic camera operation for event documentation, short films, and visual content production.</p>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+          <h3 class="skill-name">Digital Media</h3>
+          <p class="skill-desc">Multi-platform content strategy — from concept to digital distribution across social media channels.</p>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
+          <h3 class="skill-name">Social Media Management</h3>
+          <p class="skill-desc">Managing and publishing content across school and personal social media platforms.</p>
+        </div>
       </div>
 
     </div>
